@@ -13,13 +13,13 @@ class AsyncForm {
    * через registerEvents()
    * */
   constructor(element) {
-    if (element === null || element === undefined || !element) {
+    if (!element) {
       throw new Error("Данных нет");
     }
+
     this.element = element;
     this.registerEvents();
   }
-
 
   /**
    * Необходимо запретить отправку формы и в момент отправки
@@ -40,12 +40,12 @@ class AsyncForm {
    * }
    * */
   getData() {
-    let input = [...this.element.querySelectorAll('input')];
+    let inputs = [...this.element.querySelectorAll('input, select')];
     let obj = {};
 
-    for (let child of input) {
-      let name = child.name;
-      obj[name] = child.value;
+    for (let input of inputs) {
+      let name = input.name;
+      obj[name] = input.value;
     }
     return obj;
   }

@@ -14,7 +14,7 @@ class AccountsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor(element) {
-    if (element === null || element === undefined || !element) {
+    if (!element) {
       throw new Error("Данных нет");
     }
     this.element = element;
@@ -37,7 +37,7 @@ class AccountsWidget {
     this.element.addEventListener('click', (event) => this.onSelectAccount(event));
   }
 
-  createNewAccount(event) {
+  createNewAccount() {
     App.getModal('createAccount').open();
   }
 
@@ -51,15 +51,25 @@ class AccountsWidget {
    * Отображает список полученных счетов с помощью
    * метода renderItem()
    * */
+
   update() {
     if (User.current()) {
       Account.list(User.current(), (err, response) => {
         if (response && response.success) {
-          if (response.data) {
-            this.clear();
-            for (let item of response.data) {
-              this.renderItem(item);
-            }
+          this.clear();
+          const modal = document.querySelector('.content-header');
+          let paragraph = modal.querySelector('p');
+          if (paragraph) {
+            paragraph.remove();
+          }
+
+          let htmlFormWithoutAccount = '<p>Счетов нет. Создайте счет</p>';
+
+          if (response.data.length === 0) {
+            modal.insertAdjacentHTML('beforeend', htmlFormWithoutAccount);
+          }
+          for (let item of response.data) {
+            this.renderItem(item);
           }
         }
       })
@@ -88,7 +98,8 @@ class AccountsWidget {
    * */
   onSelectAccount(event) {
     let account = [...this.element.querySelectorAll('.account')];
-    if ((event.target.tagName === 'SPAN' && event.target.closest('.account') && !event.target.closest('.active')) || (event.target.tagName === 'A' && event.target.closest('.account') && !event.target.closest('.active'))) {
+
+    if (event.target.closest('.account') && !event.target.closest('.active')) {
       for (let item of account) {
         item.classList.remove('active');
       }
@@ -104,8 +115,8 @@ class AccountsWidget {
    * */
   getAccountHTML(item) {
     let html = `
-    <li class="account" data-id="${item.id}">
-      <a href="#">
+    <li class='account' data-id='${item.id}'>
+      <a href='#'>
         <span>${item.name} / </span>
         <span>${item.sum}</span>
       </a>

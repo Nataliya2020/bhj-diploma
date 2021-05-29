@@ -12,7 +12,7 @@ class Modal {
    * необходимо выкинуть ошибку.
    * */
   constructor(element) {
-    if (element === null || element === undefined || !element) {
+    if (!element) {
       throw new Error("Данных нет");
     }
 
@@ -26,7 +26,7 @@ class Modal {
    * (с помощью метода Modal.onClose)
    * */
   registerEvents() {
-    let modal = [...this.element.querySelectorAll('button[data-dismiss="modal"]')];
+    let modal = [...this.element.querySelectorAll('button[data-dismiss = "modal"]')];
 
     for (let child of modal) {
       child.addEventListener('click', (e) => this.onClose(e));

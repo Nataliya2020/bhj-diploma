@@ -18,22 +18,14 @@ class Sidebar {
    * при нажатии на кнопку .sidebar-toggle
    * */
   static initToggleButton() {
-    const sidebarToggle = document.querySelector('.sidebar-mini');
+    const sidebarToggle = document.querySelector('.visible-xs');
     sidebarToggle.addEventListener('click', this.toggleShowSidebar);
   }
 
   static toggleShowSidebar(event) {
-    const bodyTarget = event.currentTarget;
-    if (!event.target.classList.contains('sidebar-toggle')) {
-      return;
-    }
-    if (!bodyTarget.classList.contains('sidebar-open')) {
-      bodyTarget.classList.remove('sidebar-collapse');
-      bodyTarget.classList.add('sidebar-open');
-    } else {
-      bodyTarget.classList.remove('sidebar-open');
-      bodyTarget.classList.add('sidebar-collapse');
-    }
+    event.preventDefault();
+    document.querySelector('.sidebar-mini').classList.toggle('sidebar-open');
+    document.querySelector('.sidebar-mini').classList.toggle('sidebar-collapse');
   }
 
   /**
@@ -53,6 +45,7 @@ class Sidebar {
 
   static showModal(event) {
     event.preventDefault();
+
     if (event.target.tagName !== 'SPAN') {
       return;
     }
@@ -66,12 +59,8 @@ class Sidebar {
     }
 
     if (event.target.closest('.menu-item_logout')) {
-      let userName = document.querySelector('.user-panel .info .user-name');
-      let data = {
-        name: userName
-      }
 
-      User.logout(data, (err, response) => {
+      User.logout({}, (err, response) => {
         if (response.success) {
           App.setState('init');
         }

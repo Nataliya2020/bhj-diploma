@@ -41,8 +41,7 @@ class User {
     createRequest({
       url: this.url + '/current',
       method: 'GET',
-      responseType: 'json',
-      data: data,
+      data,
       callback: (err, response) => {
         if (response && response.user) {
           User.setCurrent(response.user);
@@ -65,7 +64,6 @@ class User {
     createRequest({
       url: this.url + '/login',
       method: 'POST',
-      responseType: 'json',
       data,
       callback: (err, response) => {
         if (response && response.user) {
@@ -82,16 +80,11 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
-  static register(data, callback = function () {
+  static register(data, callback = function() {
   }) {
-
-    for (let prop in data) {
-      let value = data[prop];
-    }
     createRequest({
       url: this.url + '/register',
       method: 'POST',
-      responseType: 'json',
       data,
       callback: (err, response) => {
         if (response && response.user) {
@@ -106,12 +99,11 @@ class User {
    * Производит выход из приложения. После успешного
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
-  static logout(data, callback = function () {
+  static logout(data, callback = function() {
   }) {
     createRequest({
       url: this.url + '/logout',
       method: 'POST',
-      responseType: 'json',
       data,
       callback: (err, response) => {
         if (response && response.user) {

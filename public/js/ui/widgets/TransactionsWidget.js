@@ -12,9 +12,10 @@ class TransactionsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor(element) {
-    if (element === null || element === undefined || !element) {
+    if (!element) {
       throw new Error("Данных нет");
     }
+
     this.element = element;
     this.registerEvents();
   }
@@ -26,12 +27,18 @@ class TransactionsWidget {
    * экземпляра окна
    * */
   registerEvents() {
+
     this.element.addEventListener('click', (event) => {
-      if (event.target.classList.contains('create-income-button')) {
+      event.preventDefault();
+      const createIncomeButton = event.target.closest('.create-income-button');
+      const createExpenseButton = event.target.closest('.create-expense-button');
+      const accounts = [...document.querySelectorAll('.account')].length;
+
+      if (createIncomeButton && accounts !== 0) {
         App.getModal('newIncome').open();
       }
 
-      if (event.target.classList.contains('create-expense-button')) {
+      if (createExpenseButton && accounts !== 0) {
         App.getModal('newExpense').open();
       }
     })
